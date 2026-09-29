@@ -4,7 +4,19 @@
 
 Gavel collects German foreclosure auctions (Zwangsversteigerungen) from court and auction portals every day, has an LLM extract the facts from the appraisals, and ranks the objects that deserve a closer look.
 
-> **TODO: add screenshots** of the listing detail page and the investor view (for example `docs/images/listing-detail.png`) and embed them here.
+![Gavel: listings for one federal state with filters, category and hearing date per object](docs/screenshots/listings-overview.png)
+
+## Screenshots
+
+The screenshots show generated demo data (fictional places, streets, case numbers and illustrations); no real listing appears in them. The interface is in German.
+
+| Screenshot | Shows |
+|---|---|
+| ![Listing detail page with gallery, key facts and bid limits](docs/screenshots/listing-detail.png) | Listing detail with gallery, key facts and bid limits (5/10 and 7/10 rule). |
+| ![Investor decision memo with bear, base and bull scenarios](docs/screenshots/investment-memo.png) | Investor memo on the detail page: bear/base/bull underwriting and bid curve. |
+| ![Fix and flip measures and deal calculation](docs/screenshots/fix-flip-calculation.png) | Fix-and-flip measures with cost ranges and the deal calculation. |
+| ![Investor search with strategy filters and ranked candidates](docs/screenshots/investor-search.png) | Investor search: strategy presets, filters and ranked candidates. |
+| ![Upcoming auction dates grouped by month](docs/screenshots/auction-dates.png) | Upcoming auction dates grouped by month. |
 
 ## Features
 
