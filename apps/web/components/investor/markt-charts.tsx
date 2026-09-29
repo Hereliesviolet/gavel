@@ -249,7 +249,7 @@ function PreisKategorieChart({ data }: { data: PreisNachKatData[] }) {
                     contentStyle={tooltipStyle}
                     labelStyle={tooltipLabelStyle}
                     cursor={{ fill: "rgba(255,255,255,0.08)" }}
-                    formatter={(v: number) => [`${v.toLocaleString("de-DE")} k€`]}
+                    formatter={(v) => [`${Number(v).toLocaleString("de-DE")} k€`]}
                   />
                   <Bar dataKey="Min" name="Minimum" radius={[3, 3, 0, 0]}>
                     {chartData.map((e) => (
@@ -374,7 +374,7 @@ function TermineProMonatChart({ data }: { data: TerminMonatData[] }) {
                 contentStyle={tooltipStyle}
                 labelStyle={tooltipLabelStyle}
                 cursor={{ fill: "rgba(255,255,255,0.08)" }}
-                formatter={(v: number) => [v.toLocaleString("de-DE"), "Termine"]}
+                formatter={(v) => [Number(v).toLocaleString("de-DE"), "Termine"]}
               />
               <Bar dataKey="count" name="Termine" fill={CHART_COLORS[0]} radius={[4, 4, 0, 0]}>
                 {data.map((_, i) => (
@@ -544,7 +544,7 @@ export function MarktCharts({
                         contentStyle={tooltipStyle}
                         labelStyle={tooltipLabelStyle}
                         cursor={{ fill: "rgba(255,255,255,0.08)" }}
-                        formatter={(v: number) => [v.toLocaleString("de-DE"), "Objekte"]}
+                        formatter={(v) => [Number(v).toLocaleString("de-DE"), "Objekte"]}
                       />
                       <Bar dataKey="anzahl" name="Anzahl" radius={[4, 4, 0, 0]}>
                         {vwVerteilung.map((_, i) => (
@@ -592,7 +592,7 @@ export function MarktCharts({
                         contentStyle={tooltipStyle}
                         labelStyle={tooltipLabelStyle}
                         cursor={{ fill: "rgba(255,255,255,0.08)" }}
-                        formatter={(v: number) => [v.toLocaleString("de-DE"), "Objekte"]}
+                        formatter={(v) => [Number(v).toLocaleString("de-DE"), "Objekte"]}
                       />
                       <Bar dataKey="Anzahl" radius={[0, 4, 4, 0]}>
                         {blData.map((_, i) => (
@@ -640,7 +640,7 @@ export function MarktCharts({
                   </Pie>
                   <Tooltip
                     contentStyle={tooltipStyle}
-                    formatter={(v: number) => [v.toLocaleString("de-DE"), "Objekte"]}
+                    formatter={(v) => [Number(v).toLocaleString("de-DE"), "Objekte"]}
                   />
                   <Legend
                     iconType="circle"

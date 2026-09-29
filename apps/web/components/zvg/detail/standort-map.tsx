@@ -69,7 +69,7 @@ export function StandortMap({
     const container = mapRef.current;
     let cleanup: (() => void) | null = null;
 
-    import("maplibre-gl").then(({ default: maplibregl }) => {
+    import("maplibre-gl").then((maplibregl) => {
       if (!container.isConnected) return;
 
       const map = new maplibregl.Map({
