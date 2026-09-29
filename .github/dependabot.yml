@@ -1,0 +1,63 @@
+version: 2
+
+# The groups below apply to version updates only (applies-to is not set and
+# defaults to version-updates). Security updates therefore stay individual,
+# immediate pull requests: they wait neither for the weekly schedule nor for
+# open-pull-requests-limit, which GitHub documents as not applying to them.
+updates:
+  # pnpm workspace: root only. apps/web is left out on purpose - when
+  # pnpm-workspace.yaml and pnpm-lock.yaml sit in the parent directory,
+  # Dependabot aborts a run from the subdirectory as a misconfiguration
+  # (dependabot-core PR 11487); the shared lockfile is updated from the root anyway.
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Berlin
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: chore(deps)
+      prefix-development: chore(deps-dev)
+    groups:
+      npm-patch-minor:
+        patterns: ["*"]
+        update-types: [patch, minor]
+      npm-major:
+        patterns: ["*"]
+        update-types: [major]
+
+  # requirements.txt pins every resolved version, transitive ones included.
+  # Without grouping, Dependabot would open one pull request per package.
+  - package-ecosystem: pip
+    directory: "/scrapers"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Berlin
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: chore(deps)
+    groups:
+      python-patch-minor:
+        patterns: ["*"]
+        update-types: [patch, minor]
+      python-major:
+        patterns: ["*"]
+        update-types: [major]
+
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Berlin
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: chore(deps)
+    groups:
+      actions:
+        patterns: ["*"]

@@ -1,0 +1,1 @@
+export const DEFAULT_TERMIN_HORIZON_DAYS = 180;

@@ -1,0 +1,36 @@
+global:
+  scrape_interval: 30s
+  evaluation_interval: 30s
+
+rule_files:
+  - /etc/prometheus/alert-rules.yml
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ["alertmanager:9093"]
+
+scrape_configs:
+  - job_name: prometheus
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  # /internal/health liefert JSON für Menschen und ist NICHT scrapebar -
+  # Prometheus-Textformat kommt aus /internal/metrics.
+  - job_name: gavel_scraper
+    metrics_path: /internal/metrics
+    scheme: http
+    authorization:
+      type: Bearer
+      credentials_file: /tmp/scraper_token
+    static_configs:
+      - targets: ["scraper:8000"]
+
+  - job_name: gavel_web
+    metrics_path: /api/metrics
+    scheme: http
+    authorization:
+      type: Bearer
+      credentials_file: /tmp/cron_token
+    static_configs:
+      - targets: ["web:3000"]

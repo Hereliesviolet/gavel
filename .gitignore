@@ -1,0 +1,90 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build
+.next/
+out/
+dist/
+
+# Von Next.js 16 zur Laufzeit generierte Agent-Regeldateien (next dev/build,
+# siehe next.config `agentRules`) - kein Quellcode, nicht versionieren.
+apps/web/AGENTS.md
+apps/web/CLAUDE.md
+*.egg-info/
+__pycache__/
+*.pyc
+*.pyo
+*.tsbuildinfo
+
+# Environment (real secrets; .env.example stays tracked)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
+.env.staging
+!.env.example
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors and assistant tooling
+.vscode/
+.idea/
+.cursor/
+.claude/
+*.swp
+*.swo
+
+# Certificates and private keys
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+id_rsa
+id_rsa.pub
+id_ed25519
+id_ed25519.pub
+*.ppk
+
+# Database dumps and backups (may contain real user data)
+*.sql.gz
+*.dump
+*.bak
+*backup*.sql
+*backup*.tar*
+
+# Python
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+
+# Docker volumes (if mounted locally instead of named volumes)
+postgres_data/
+redis_data/
+minio_data/
+grafana_data/
+prometheus_data/
+
+# Scraper and runtime logs
+scraper.log
+*.log.*
+
+# Redis RDB snapshot (runtime artefact, recreated on start)
+dump.rdb
+
+# Local Scrapling response cache (SCRAPE_DEV_CACHE=true, see docs/CUSTOM_URL_ANALYSIS.md)
+.scrapling_dev_cache/
+scrapers/.scrapling_dev_cache/

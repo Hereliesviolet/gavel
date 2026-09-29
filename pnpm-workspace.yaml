@@ -1,0 +1,20 @@
+packages:
+  - "apps/*"
+
+# Doppelt gepflegt: pnpm 9 (siehe packageManager) liest Overrides aus
+# package.json, pnpm 10 nur noch von hier. Ohne den zweiten Eintrag fallen die
+# Sicherheits-Overrides bei einem Install mit neuerem pnpm still weg.
+overrides:
+  nodemailer: ^9.0.1
+  postcss: ">=8.5.10"
+  esbuild: ">=0.25.0"
+  brace-expansion@^1: ^1.1.18
+  brace-expansion@^5: ^5.0.9
+  js-yaml@^4: ^4.3.1
+
+onlyBuiltDependencies:
+  - esbuild
+  - msgpackr-extract
+  - sharp
+  - unrs-resolver
+  - "@tailwindcss/oxide"

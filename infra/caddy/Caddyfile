@@ -1,0 +1,70 @@
+# Site block for the bundled Caddy service. DOMAIN comes from the environment;
+# TRUST_PROXY_SECRET, if set, is passed to the app as X-Gavel-Proxy so it
+# only trusts X-Real-IP / X-Forwarded-For from this proxy.
+{$DOMAIN} {
+    reverse_proxy web:3000 {
+        header_up Host {host}
+        header_up X-Real-IP {remote}
+        header_up X-Forwarded-For {remote}
+        header_up X-Forwarded-Proto {scheme}
+        header_up X-Gavel-Proxy {$TRUST_PROXY_SECRET}
+    }
+
+    encode gzip zstd
+
+    # Security Headers
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "DENY"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        -Server
+    }
+
+    # Appraisal and expose PDFs and custom-URL images are served only through
+    # the authenticated app, never straight from MinIO.
+    @zvg_docs path_regexp ^/zvg-images/.+/(gutachten|expose)\.pdf$
+    handle @zvg_docs {
+        respond 404
+    }
+
+    @real_estate path_regexp ^/zvg-images/real-estate/
+    handle @real_estate {
+        respond 404
+    }
+
+    # Public listing images from MinIO
+    handle /zvg-images/* {
+        rewrite * /zvg-images{path}
+        reverse_proxy minio:9000
+    }
+
+    log {
+        output file /var/log/caddy/access.log
+        format filter {
+            wrap json
+            fields {
+                request>uri query {
+                    token replace REDACTED
+                    access_token replace REDACTED
+                    refresh_token replace REDACTED
+                    id_token replace REDACTED
+                    shareToken replace REDACTED
+                    code replace REDACTED
+                    session replace REDACTED
+                    sessionid replace REDACTED
+                    auth replace REDACTED
+                    authKey replace REDACTED
+                    key replace REDACTED
+                    api_key replace REDACTED
+                    signature replace REDACTED
+                    sid replace REDACTED
+                    secret replace REDACTED
+                    password replace REDACTED
+                    jwt replace REDACTED
+                    bearer replace REDACTED
+                }
+            }
+        }
+    }
+}

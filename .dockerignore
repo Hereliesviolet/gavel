@@ -1,0 +1,20 @@
+# Keeps host-side artefacts out of the Docker build context. Without this,
+# `COPY . .` would overwrite the freshly installed node_modules of the deps
+# stage with stale host copies and cause Next.js / @next/swc version conflicts
+# in the production build.
+node_modules
+**/node_modules
+.next
+**/.next
+.git
+**/__pycache__
+**/*.pyc
+.venv
+**/.venv
+*.log
+.env
+.env.local
+**/.env.local
+.env.*.local
+**/.env.*.local
+scraper.log

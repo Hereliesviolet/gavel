@@ -1,0 +1,48 @@
+-- Custom-URL ↔ ZVG Informationsparität (Listing-Fakten + KI-Sektionen).
+-- Siehe docs/CUSTOM_ZVG_PARITY.md. Additiv/non-destruktiv.
+
+ALTER TABLE "real_estate_listings"
+  ADD COLUMN IF NOT EXISTS "grundstuecksflaeche_m2" decimal(10, 2),
+  ADD COLUMN IF NOT EXISTS "nutzflaeche_m2" decimal(10, 2),
+  ADD COLUMN IF NOT EXISTS "etage" text,
+  ADD COLUMN IF NOT EXISTS "anzahl_etagen" smallint,
+  ADD COLUMN IF NOT EXISTS "energieausweis_typ" text,
+  ADD COLUMN IF NOT EXISTS "endenergiebedarf_kwh" decimal(8, 2),
+  ADD COLUMN IF NOT EXISTS "heizung" text,
+  ADD COLUMN IF NOT EXISTS "denkmalschutz" boolean,
+  ADD COLUMN IF NOT EXISTS "vermietet" boolean,
+  ADD COLUMN IF NOT EXISTS "hausgeld_eur" decimal(10, 2),
+  ADD COLUMN IF NOT EXISTS "kaltmiete_eur" decimal(10, 2),
+  ADD COLUMN IF NOT EXISTS "zustand_kurz" text;
+
+ALTER TABLE "real_estate_ki_analyses"
+  ADD COLUMN IF NOT EXISTS "maengel" jsonb DEFAULT '[]'::jsonb,
+  ADD COLUMN IF NOT EXISTS "modernisierungen" jsonb DEFAULT '[]'::jsonb,
+  ADD COLUMN IF NOT EXISTS "energieausweis_vorhanden" boolean,
+  ADD COLUMN IF NOT EXISTS "effizienzklasse" text,
+  ADD COLUMN IF NOT EXISTS "ausweisjahr" smallint,
+  ADD COLUMN IF NOT EXISTS "energietraeger" text,
+  ADD COLUMN IF NOT EXISTS "endenergieverbrauch_kwh" decimal(8, 2),
+  ADD COLUMN IF NOT EXISTS "innenbesichtigung" boolean,
+  ADD COLUMN IF NOT EXISTS "restnutzungsdauer_j" smallint,
+  ADD COLUMN IF NOT EXISTS "heizung" text,
+  ADD COLUMN IF NOT EXISTS "wohnraeume" text,
+  ADD COLUMN IF NOT EXISTS "zustand_aussen" text,
+  ADD COLUMN IF NOT EXISTS "zustand_innen" text,
+  ADD COLUMN IF NOT EXISTS "maengel_kurz" text,
+  ADD COLUMN IF NOT EXISTS "baubeschreibung" text,
+  ADD COLUMN IF NOT EXISTS "instandhaltung" text,
+  ADD COLUMN IF NOT EXISTS "lage_einwohner" integer,
+  ADD COLUMN IF NOT EXISTS "lage_region" text,
+  ADD COLUMN IF NOT EXISTS "lage_verkehr" text,
+  ADD COLUMN IF NOT EXISTS "lage_charakter" text,
+  ADD COLUMN IF NOT EXISTS "lage_umgebung" text,
+  ADD COLUMN IF NOT EXISTS "moegliche_kaltmiete" decimal(10, 2),
+  ADD COLUMN IF NOT EXISTS "hausgeld" decimal(10, 2),
+  ADD COLUMN IF NOT EXISTS "jahresrohertrag" decimal(12, 2),
+  ADD COLUMN IF NOT EXISTS "liegenschaftszinssatz" decimal(6, 2),
+  ADD COLUMN IF NOT EXISTS "ertragswert" decimal(12, 2),
+  ADD COLUMN IF NOT EXISTS "bodenrichtwert_eur_m2" decimal(10, 2),
+  ADD COLUMN IF NOT EXISTS "bodenrichtwert_stichtag" text,
+  ADD COLUMN IF NOT EXISTS "bodenrichtwert_berechnung" text,
+  ADD COLUMN IF NOT EXISTS "orte_in_der_naehe" jsonb DEFAULT '[]'::jsonb;

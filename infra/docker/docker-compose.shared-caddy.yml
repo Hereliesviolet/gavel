@@ -1,0 +1,34 @@
+name: gavel
+
+# Optional override for hosts where ports 80/443 already belong to another
+# reverse proxy (for example a Caddy container for a different project).
+#
+# Include it on top of docker-compose.prod.yml and do NOT start the bundled
+# `caddy` service:
+#
+#   docker compose -f docker-compose.prod.yml -f docker-compose.shared-caddy.yml \
+#     --env-file ../../.env up -d postgres redis minio web scraper prefect-worker
+#
+# `web` and `minio` are then also attached to the Docker network of the
+# existing proxy, where they resolve as `web` and `minio`. Add a site block for
+# your domain to that proxy's Caddyfile; infra/caddy/Caddyfile is a template.
+#
+# SHARED_CADDY_NETWORK must be the exact name of the network the existing proxy
+# container is attached to. Find it with:
+#   docker inspect <proxy-container> --format '{{json .NetworkSettings.Networks}}'
+
+services:
+  web:
+    networks:
+      - gavel_net
+      - shared_caddy_net
+
+  minio:
+    networks:
+      - gavel_net
+      - shared_caddy_net
+
+networks:
+  shared_caddy_net:
+    external: true
+    name: ${SHARED_CADDY_NETWORK:-caddy_network}

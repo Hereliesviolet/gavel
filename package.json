@@ -1,0 +1,28 @@
+{
+  "name": "gavel",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@9.15.9",
+  "scripts": {
+    "dev": "pnpm --filter web dev",
+    "build": "pnpm --filter web build",
+    "lint": "pnpm --filter web lint",
+    "typecheck": "pnpm --filter web exec tsc --noEmit",
+    "test": "pnpm --filter web test:deps",
+    "format": "prettier --write \"apps/web/**/*.{ts,tsx,mjs,css,json}\" \"*.json\"",
+    "format:check": "prettier --check \"apps/web/**/*.{ts,tsx,mjs,css,json}\" \"*.json\""
+  },
+  "pnpm": {
+    "overrides": {
+      "nodemailer": "^9.0.1",
+      "postcss": ">=8.5.10",
+      "esbuild": ">=0.25.0",
+      "brace-expansion@^1": "^1.1.18",
+      "brace-expansion@^5": "^5.0.9",
+      "js-yaml@^4": "^4.3.1"
+    }
+  },
+  "devDependencies": {
+    "prettier": "^3"
+  }
+}

@@ -1,0 +1,56 @@
+groups:
+  - name: gavel
+    rules:
+      - alert: ScraperDown
+        expr: up{job="gavel_scraper"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: Scraper-API ist nicht erreichbar
+          description: Prometheus erreicht scraper:8000/internal/metrics seit 2 Minuten nicht.
+
+      - alert: ScraperDbDown
+        expr: gavel_db_up == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: Scraper hat keine Postgres-Verbindung
+          description: gavel_db_up ist 0. Analysen und Daily-Flows schreiben nicht.
+
+      - alert: WebDown
+        expr: up{job="gavel_web"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: Next.js ist nicht erreichbar
+          description: Prometheus erreicht web:3000/api/metrics seit 2 Minuten nicht.
+
+      - alert: AnalyseJobsFailing
+        expr: gavel_analyse_jobs_24h{status="error"} > 10
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          summary: Ungewöhnlich viele fehlgeschlagene Custom-URL-Analysen
+          description: Mehr als 10 Fehlerjobs in 24 Stunden.
+
+      - alert: AnalyseJobsStuck
+        expr: gavel_analyse_jobs_active > 8
+        for: 30m
+        labels:
+          severity: warning
+        annotations:
+          summary: Analyse-Jobs bleiben hängen
+          description: Mehr als 8 queued/running Jobs über 30 Minuten.
+
+      - alert: ZvgBestandLeer
+        expr: gavel_zvg_listings_active < 50
+        for: 30m
+        labels:
+          severity: warning
+        annotations:
+          summary: Aktiver ZVG-Bestand unerwartet klein
+          description: Weniger als 50 aktive Listings. Scraper-Lauf oder Archivierung prüfen.

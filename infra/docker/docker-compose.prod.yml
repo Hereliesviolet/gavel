@@ -1,0 +1,313 @@
+name: gavel
+
+# Production stack. Copy .env.example to .env and start with:
+#
+#   docker compose -f docker-compose.prod.yml --env-file ../../.env up -d --build
+#
+# Two things are expected to exist on the host and are not created here:
+#   - a Prefect server reachable at PREFECT_API_URL on the Docker network
+#     PREFECT_NETWORK (see docs/DEPLOYMENT.md), and
+#   - free ports 80/443 for the bundled Caddy. If another reverse proxy owns
+#     them, use docker-compose.shared-caddy.yml and do not start `caddy`.
+
+services:
+  # ─── Database ─────────────────────────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: gavel_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: immopulse
+      POSTGRES_USER: immopulse
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./initdb:/docker-entrypoint-initdb.d:ro
+    networks:
+      - gavel_net
+    # pg_stat_statements records per-query statistics for slow-query analysis.
+    # It has to be preloaded at server start, so changing it needs a restart.
+    command: postgres -c shared_preload_libraries=pg_stat_statements
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U immopulse"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # Resource limits keep one container from starving other workloads on a
+    # shared host. Adjust them to the size of your dataset.
+    mem_limit: 2g
+    cpus: 2.0
+
+  # ─── Redis ────────────────────────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: gavel_redis
+    restart: always
+    command: redis-server --requirepass ${REDIS_PASSWORD} --appendonly yes
+    volumes:
+      - redis_data:/data
+    networks:
+      - gavel_net
+    healthcheck:
+      test: ["CMD", "redis-cli", "--pass", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # Headroom for append-only-file rewrites, which briefly use more memory.
+    mem_limit: 256m
+    cpus: 0.5
+
+  # ─── MinIO (object storage for images and documents) ─────────────────────────
+  minio:
+    image: minio/minio:latest
+    container_name: gavel_minio
+    restart: always
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY}
+    volumes:
+      - minio_data:/data
+    networks:
+      - gavel_net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    mem_limit: 1.5g
+    cpus: 1.5
+
+  # ─── Next.js app ──────────────────────────────────────────────────────────────
+  web:
+    build:
+      context: ../../
+      dockerfile: apps/web/Dockerfile
+      args:
+        NEXT_PUBLIC_MAPTILER_KEY: ${NEXT_PUBLIC_MAPTILER_KEY:-}
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-}
+    image: gavel_web:latest
+    container_name: gavel_web
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://immopulse:${DB_PASSWORD}@postgres:5432/immopulse
+      REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      AUTH_SECRET: ${AUTH_SECRET:-${NEXTAUTH_SECRET}}
+      NEXTAUTH_URL: ${NEXTAUTH_URL}
+      MINIO_ENDPOINT: minio
+      MINIO_PORT: "9000"
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+      MINIO_PUBLIC_URL: ${MINIO_PUBLIC_URL}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_SECURE: ${SMTP_SECURE}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+      SMTP_FROM: ${SMTP_FROM}
+      # Protects /api/cron/* (see proxy.ts and lib/cron-auth.ts). The scoped
+      # secrets are optional; when set they replace CRON_SECRET for that audience.
+      CRON_SECRET: ${CRON_SECRET}
+      CRON_EMAIL_SECRET: ${CRON_EMAIL_SECRET:-}
+      CRON_OPS_SECRET: ${CRON_OPS_SECRET:-}
+      CRON_JOBS_SECRET: ${CRON_JOBS_SECRET:-}
+      METRICS_SECRET: ${METRICS_SECRET:-}
+      ANALYSE_DAILY_LIMIT: ${ANALYSE_DAILY_LIMIT:-25}
+      # Recipient of the daily data-quality report and the freshness alert.
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      SUPPORT_EMAIL: ${SUPPORT_EMAIL:-}
+      CONTACT_INFO: ${CONTACT_INFO:-}
+      NODE_ENV: production
+      # app/api/analyse forwards custom-URL analyses to the FastAPI service in
+      # the scraper container. Reachable only on gavel_net.
+      SCRAPER_API_URL: ${SCRAPER_API_URL}
+      SCRAPER_API_SECRET: ${SCRAPER_API_SECRET}
+      SENTRY_DSN: ${SENTRY_DSN:-}
+      AUTH_OIDC_ISSUER: ${AUTH_OIDC_ISSUER:-}
+      AUTH_OIDC_CLIENT_ID: ${AUTH_OIDC_CLIENT_ID:-}
+      AUTH_OIDC_CLIENT_SECRET: ${AUTH_OIDC_CLIENT_SECRET:-}
+      AUTH_OIDC_NAME: ${AUTH_OIDC_NAME:-}
+      TRUST_PROXY_HEADERS: "1"
+      TRUST_PROXY_SECRET: ${TRUST_PROXY_SECRET:-}
+      NEXT_PUBLIC_MAPTILER_KEY: ${NEXT_PUBLIC_MAPTILER_KEY:-}
+      MAPTILER_SERVER_KEY: ${MAPTILER_SERVER_KEY:-}
+    networks:
+      - gavel_net
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3000/api/health').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+    mem_limit: 768m
+    cpus: 1.5
+
+  # ─── Caddy reverse proxy ──────────────────────────────────────────────────────
+  # Binds host ports 80/443. If another reverse proxy already uses them, the
+  # start fails with "port is already allocated"; see docs/DEPLOYMENT.md for
+  # the shared-proxy alternative.
+  caddy:
+    image: caddy:2-alpine
+    container_name: gavel_caddy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DOMAIN: ${DOMAIN}
+      TRUST_PROXY_SECRET: ${TRUST_PROXY_SECRET:-}
+    volumes:
+      - ../caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+      - caddy_logs:/var/log/caddy
+    networks:
+      - gavel_net
+    depends_on:
+      - web
+
+  # ─── Scraper API (FastAPI: custom-URL analysis, metrics, health) ─────────────
+  # Scheduled scraping and AI analysis run in `prefect-worker`; this container
+  # only serves the API so the two never run the same jobs twice.
+  scraper:
+    build:
+      context: ../../
+      dockerfile: scrapers/Dockerfile
+    image: gavel_scraper:latest
+    container_name: gavel_scraper
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://immopulse:${DB_PASSWORD}@postgres:5432/immopulse
+      # Needed to enqueue AI analyses when this service creates listings.
+      REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379
+      MISSING_TOLERANCE_DAYS: ${MISSING_TOLERANCE_DAYS:-3}
+      MINIO_ENDPOINT: minio
+      MINIO_PORT: "9000"
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+      # Without this, stored image and PDF links fall back to
+      # http://localhost:9000 and break in the browser.
+      MINIO_PUBLIC_URL: ${MINIO_PUBLIC_URL}
+      LANGDOCK_API_KEY: ${LANGDOCK_API_KEY}
+      LANGDOCK_BASE_URL: ${LANGDOCK_BASE_URL}
+      LANGDOCK_MODEL: ${LANGDOCK_MODEL}
+      LANGDOCK_EXTRACT_MODEL: ${LANGDOCK_EXTRACT_MODEL:-claude-haiku-4-5-default}
+      KI_DAILY_LIMIT: ${KI_DAILY_LIMIT:-500}
+      KI_BACKUP_LIMIT: ${KI_BACKUP_LIMIT:-400}
+      CONTACT_INFO: ${CONTACT_INFO:-}
+      RESPECT_ROBOTS_TXT: ${RESPECT_ROBOTS_TXT:-true}
+      PREFECT_API_URL: ${PREFECT_API_URL:-http://prefect-server:4200/api}
+      # check_alerts.py calls the internal Next.js route.
+      INTERNAL_API_URL: http://web:3000
+      CRON_SECRET: ${CRON_SECRET}
+      CRON_EMAIL_SECRET: ${CRON_EMAIL_SECRET:-}
+      CRON_OPS_SECRET: ${CRON_OPS_SECRET:-}
+      CRON_JOBS_SECRET: ${CRON_JOBS_SECRET:-}
+      # Bearer secret for POST /internal/analyze-url (src/api/app.py); the same
+      # variable is passed to `web`.
+      SCRAPER_API_SECRET: ${SCRAPER_API_SECRET}
+      SCRAPE_MIN_INTERVAL_PER_DOMAIN_SEC: ${SCRAPE_MIN_INTERVAL_PER_DOMAIN_SEC:-8}
+      SCRAPE_MAX_PER_DOMAIN_HOUR: ${SCRAPE_MAX_PER_DOMAIN_HOUR:-30}
+      SCRAPE_MAX_GLOBAL_HOUR: ${SCRAPE_MAX_GLOBAL_HOUR:-60}
+      SCRAPE_COOLDOWN_SECONDS: ${SCRAPE_COOLDOWN_SECONDS:-3600}
+      SENTRY_DSN: ${SENTRY_DSN:-}
+    volumes:
+      - scraper_adaptive_data:/data/scrapling
+    networks:
+      - gavel_net
+      - prefect_net
+    command: >
+      uvicorn src.api.app:app --host 0.0.0.0 --port 8000
+    mem_limit: 3072m
+    cpus: 2.0
+
+  # ─── Prefect worker (scheduled flows) ─────────────────────────────────────────
+  prefect-worker:
+    build:
+      context: ../../
+      dockerfile: scrapers/Dockerfile
+    image: gavel_scraper:latest
+    container_name: gavel_prefect_worker
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://immopulse:${DB_PASSWORD}@postgres:5432/immopulse
+      REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379
+      MISSING_TOLERANCE_DAYS: ${MISSING_TOLERANCE_DAYS:-3}
+      MINIO_ENDPOINT: minio
+      MINIO_PORT: "9000"
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+      MINIO_PUBLIC_URL: ${MINIO_PUBLIC_URL}
+      LANGDOCK_API_KEY: ${LANGDOCK_API_KEY}
+      LANGDOCK_BASE_URL: ${LANGDOCK_BASE_URL}
+      LANGDOCK_MODEL: ${LANGDOCK_MODEL}
+      LANGDOCK_EXTRACT_MODEL: ${LANGDOCK_EXTRACT_MODEL:-claude-haiku-4-5-default}
+      KI_DAILY_LIMIT: ${KI_DAILY_LIMIT:-500}
+      KI_BACKUP_LIMIT: ${KI_BACKUP_LIMIT:-400}
+      CONTACT_INFO: ${CONTACT_INFO:-}
+      RESPECT_ROBOTS_TXT: ${RESPECT_ROBOTS_TXT:-true}
+      PREFECT_API_URL: ${PREFECT_API_URL:-http://prefect-server:4200/api}
+      # Step 9 of the daily pipeline calls the alert route on `web`.
+      INTERNAL_API_URL: http://web:3000
+      CRON_SECRET: ${CRON_SECRET}
+      CRON_EMAIL_SECRET: ${CRON_EMAIL_SECRET:-}
+      CRON_OPS_SECRET: ${CRON_OPS_SECRET:-}
+      CRON_JOBS_SECRET: ${CRON_JOBS_SECRET:-}
+    volumes:
+      - scraper_adaptive_data:/data/scrapling
+    networks:
+      - gavel_net
+      - prefect_net
+    command: python deploy_flows.py
+    # scrapers/Dockerfile copies the contents of scrapers/ to /app.
+    working_dir: /app
+    # Parallel LLM calls and PDF extraction need far more memory than the
+    # bare flow runner; 512m was OOM-killed during long backfills.
+    mem_limit: 2560m
+    cpus: 1.5
+
+  # Prometheus, Alertmanager and Grafana are optional and live in
+  # docker-compose.monitoring.yml.
+
+networks:
+  gavel_net:
+    driver: bridge
+  # Network of the Prefect server. Create it once (docker network create
+  # prefect_network) or point PREFECT_NETWORK at an existing one.
+  prefect_net:
+    external: true
+    name: ${PREFECT_NETWORK:-prefect_network}
+
+volumes:
+  # Volume names are configurable so existing data can be reused, for example
+  # POSTGRES_VOLUME=my_existing_postgres_volume. Docker creates missing ones.
+  postgres_data:
+    name: ${POSTGRES_VOLUME:-gavel_postgres_data}
+  redis_data:
+    name: ${REDIS_VOLUME:-gavel_redis_data}
+  minio_data:
+    name: ${MINIO_VOLUME:-gavel_minio_data}
+  caddy_data:
+  caddy_config:
+  caddy_logs:
+  # Element positions learned by the adaptive selectors (content_slicer.py,
+  # adaptive_selector.py) are kept under /data/scrapling across deployments.
+  scraper_adaptive_data:

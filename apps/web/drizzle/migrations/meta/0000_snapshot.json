@@ -1,0 +1,2318 @@
+{
+  "id": "cff3d319-a6ff-4f2a-a49f-55f61c3f10a3",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.zvg_images": {
+      "name": "zvg_images",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "listing_id": {
+          "name": "listing_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "storage_path": {
+          "name": "storage_path",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "public_url": {
+          "name": "public_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "position": {
+          "name": "position",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_cover": {
+          "name": "is_cover",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "width": {
+          "name": "width",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "height": {
+          "name": "height",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NOW()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "zvg_images_listing_id_zvg_listings_id_fk": {
+          "name": "zvg_images_listing_id_zvg_listings_id_fk",
+          "tableFrom": "zvg_images",
+          "tableTo": "zvg_listings",
+          "columnsFrom": [
+            "listing_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.zvg_ki_analyses": {
+      "name": "zvg_ki_analyses",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "listing_id": {
+          "name": "listing_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "grundbuch_blatt": {
+          "name": "grundbuch_blatt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "grundbuch_flurstueck": {
+          "name": "grundbuch_flurstueck",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "grundbuch_gemarkung": {
+          "name": "grundbuch_gemarkung",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "flurstuecke": {
+          "name": "flurstuecke",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "maengel": {
+          "name": "maengel",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "belastungen": {
+          "name": "belastungen",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "modernisierungen": {
+          "name": "modernisierungen",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "gebaeudenutzungen": {
+          "name": "gebaeudenutzungen",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "orte_in_der_naehe": {
+          "name": "orte_in_der_naehe",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bodenrichtwert_eur_m2": {
+          "name": "bodenrichtwert_eur_m2",
+          "type": "numeric(12, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bodenrichtwert_stichtag": {
+          "name": "bodenrichtwert_stichtag",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bodenrichtwert_berechnung": {
+          "name": "bodenrichtwert_berechnung",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "energieausweis_vorhanden": {
+          "name": "energieausweis_vorhanden",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "effizienzklasse": {
+          "name": "effizienzklasse",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ausweisjahr": {
+          "name": "ausweisjahr",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "energietraeger": {
+          "name": "energietraeger",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "endenergieverbrauch_kwh": {
+          "name": "endenergieverbrauch_kwh",
+          "type": "numeric(8, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "innenbesichtigung": {
+          "name": "innenbesichtigung",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "restnutzungsdauer_j": {
+          "name": "restnutzungsdauer_j",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "heizung": {
+          "name": "heizung",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "wohnraeume": {
+          "name": "wohnraeume",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "zustand_aussen": {
+          "name": "zustand_aussen",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "zustand_innen": {
+          "name": "zustand_innen",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "maengel_kurz": {
+          "name": "maengel_kurz",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "baubeschreibung": {
+          "name": "baubeschreibung",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "instandhaltung": {
+          "name": "instandhaltung",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "baulasten": {
+          "name": "baulasten",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lage_einwohner": {
+          "name": "lage_einwohner",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lage_region": {
+          "name": "lage_region",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lage_verkehr": {
+          "name": "lage_verkehr",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lage_charakter": {
+          "name": "lage_charakter",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lage_umgebung": {
+          "name": "lage_umgebung",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "moegliche_kaltmiete": {
+          "name": "moegliche_kaltmiete",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hausgeld": {
+          "name": "hausgeld",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "jahresrohertrag": {
+          "name": "jahresrohertrag",
+          "type": "numeric(12, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "liegenschaftszinssatz": {
+          "name": "liegenschaftszinssatz",
+          "type": "numeric(5, 3)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ertragswert": {
+          "name": "ertragswert",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "investment_score": {
+          "name": "investment_score",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "investment_score_begruendung": {
+          "name": "investment_score_begruendung",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "risiken_investor": {
+          "name": "risiken_investor",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'[]'::jsonb"
+        },
+        "fix_flip_massnahmen": {
+          "name": "fix_flip_massnahmen",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'[]'::jsonb"
+        },
+        "fix_flip_werteinschaetzung": {
+          "name": "fix_flip_werteinschaetzung",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fix_flip_gesamtkosten_min_eur": {
+          "name": "fix_flip_gesamtkosten_min_eur",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fix_flip_gesamtkosten_max_eur": {
+          "name": "fix_flip_gesamtkosten_max_eur",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "arv_min_eur": {
+          "name": "arv_min_eur",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "arv_max_eur": {
+          "name": "arv_max_eur",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "arv_begruendung": {
+          "name": "arv_begruendung",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "arv_konfidenz": {
+          "name": "arv_konfidenz",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "holding_monate": {
+          "name": "holding_monate",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": false,
+          "default": 9
+        },
+        "flip_gesamtinvestition_min_eur": {
+          "name": "flip_gesamtinvestition_min_eur",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "flip_gesamtinvestition_max_eur": {
+          "name": "flip_gesamtinvestition_max_eur",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "flip_gewinn_min_eur": {
+          "name": "flip_gewinn_min_eur",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "flip_gewinn_max_eur": {
+          "name": "flip_gewinn_max_eur",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "flip_roi_pct_min": {
+          "name": "flip_roi_pct_min",
+          "type": "numeric(6, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "flip_roi_pct_max": {
+          "name": "flip_roi_pct_max",
+          "type": "numeric(6, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "flip_opportunity_score": {
+          "name": "flip_opportunity_score",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "flip_opportunity_begruendung": {
+          "name": "flip_opportunity_begruendung",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "flip_szenario": {
+          "name": "flip_szenario",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "model_used": {
+          "name": "model_used",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tokens_used": {
+          "name": "tokens_used",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "analyzed_at": {
+          "name": "analyzed_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NOW()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "zvg_ki_analyses_listing_id_zvg_listings_id_fk": {
+          "name": "zvg_ki_analyses_listing_id_zvg_listings_id_fk",
+          "tableFrom": "zvg_ki_analyses",
+          "tableTo": "zvg_listings",
+          "columnsFrom": [
+            "listing_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "zvg_ki_analyses_listing_id_unique": {
+          "name": "zvg_ki_analyses_listing_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "listing_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.zvg_listings": {
+      "name": "zvg_listings",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "aktenzeichen": {
+          "name": "aktenzeichen",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "bundesland": {
+          "name": "bundesland",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "bundesland_name": {
+          "name": "bundesland_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source": {
+          "name": "source",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source_url": {
+          "name": "source_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "direktlink": {
+          "name": "direktlink",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "typ": {
+          "name": "typ",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "kategorie": {
+          "name": "kategorie",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "adresse": {
+          "name": "adresse",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "strasse": {
+          "name": "strasse",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hausnummer": {
+          "name": "hausnummer",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "plz": {
+          "name": "plz",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ort": {
+          "name": "ort",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stadtteil": {
+          "name": "stadtteil",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lat": {
+          "name": "lat",
+          "type": "numeric(10, 7)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lng": {
+          "name": "lng",
+          "type": "numeric(10, 7)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "verkehrswert": {
+          "name": "verkehrswert",
+          "type": "numeric(14, 0)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "limit_75_pct": {
+          "name": "limit_75_pct",
+          "type": "numeric(14, 0)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "limit_50_pct": {
+          "name": "limit_50_pct",
+          "type": "numeric(14, 0)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "wohnflaeche_m2": {
+          "name": "wohnflaeche_m2",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "grundstuecksflaeche_m2": {
+          "name": "grundstuecksflaeche_m2",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nutzflaeche_m2": {
+          "name": "nutzflaeche_m2",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "gesamtflaeche_m2": {
+          "name": "gesamtflaeche_m2",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "baujahr": {
+          "name": "baujahr",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "zimmer": {
+          "name": "zimmer",
+          "type": "numeric(4, 1)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "etage": {
+          "name": "etage",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "amtsgericht": {
+          "name": "amtsgericht",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "versteigerungsort": {
+          "name": "versteigerungsort",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "termin_date": {
+          "name": "termin_date",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "termin_saal": {
+          "name": "termin_saal",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ist_neu": {
+          "name": "ist_neu",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "ist_aktiv": {
+          "name": "ist_aktiv",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": true
+        },
+        "denkmalschutz": {
+          "name": "denkmalschutz",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vermietet": {
+          "name": "vermietet",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "beschreibung": {
+          "name": "beschreibung",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "miteigentumsanteil": {
+          "name": "miteigentumsanteil",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sondereigentum": {
+          "name": "sondereigentum",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "gutachten_url": {
+          "name": "gutachten_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "expose_url": {
+          "name": "expose_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "raw_data": {
+          "name": "raw_data",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "scraped_at": {
+          "name": "scraped_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NOW()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NOW()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NOW()"
+        },
+        "last_seen_at": {
+          "name": "last_seen_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NOW()"
+        },
+        "data_quality_flags": {
+          "name": "data_quality_flags",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'[]'::jsonb"
+        },
+        "needs_review": {
+          "name": "needs_review",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "data_quality_checked_at": {
+          "name": "data_quality_checked_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "scrape_completed_at": {
+          "name": "scrape_completed_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "idx_zvg_bundesland": {
+          "name": "idx_zvg_bundesland",
+          "columns": [
+            {
+              "expression": "bundesland",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_zvg_termin": {
+          "name": "idx_zvg_termin",
+          "columns": [
+            {
+              "expression": "termin_date",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_zvg_last_seen_at": {
+          "name": "idx_zvg_last_seen_at",
+          "columns": [
+            {
+              "expression": "last_seen_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_zvg_scrape_completed_at": {
+          "name": "idx_zvg_scrape_completed_at",
+          "columns": [
+            {
+              "expression": "scrape_completed_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_zvg_verkehrswert": {
+          "name": "idx_zvg_verkehrswert",
+          "columns": [
+            {
+              "expression": "verkehrswert",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_zvg_kategorie": {
+          "name": "idx_zvg_kategorie",
+          "columns": [
+            {
+              "expression": "kategorie",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_zvg_slug": {
+          "name": "idx_zvg_slug",
+          "columns": [
+            {
+              "expression": "slug",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_zvg_geo": {
+          "name": "idx_zvg_geo",
+          "columns": [
+            {
+              "expression": "lat",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "lng",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_zvg_needs_review": {
+          "name": "idx_zvg_needs_review",
+          "columns": [
+            {
+              "expression": "needs_review",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_zvg_ort_trgm": {
+          "name": "idx_zvg_ort_trgm",
+          "columns": [
+            {
+              "expression": "\"ort\" gin_trgm_ops",
+              "asc": true,
+              "isExpression": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        },
+        "idx_zvg_adresse_trgm": {
+          "name": "idx_zvg_adresse_trgm",
+          "columns": [
+            {
+              "expression": "\"adresse\" gin_trgm_ops",
+              "asc": true,
+              "isExpression": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "zvg_listings_aktenzeichen_source_bundesland_unique": {
+          "name": "zvg_listings_aktenzeichen_source_bundesland_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "aktenzeichen",
+            "source",
+            "bundesland"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.custom_url_requests": {
+      "name": "custom_url_requests",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "url": {
+          "name": "url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "error_message": {
+          "name": "error_message",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "listing_id": {
+          "name": "listing_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "requested_at": {
+          "name": "requested_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NOW()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "custom_url_requests_user_id_users_id_fk": {
+          "name": "custom_url_requests_user_id_users_id_fk",
+          "tableFrom": "custom_url_requests",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "custom_url_requests_listing_id_real_estate_listings_id_fk": {
+          "name": "custom_url_requests_listing_id_real_estate_listings_id_fk",
+          "tableFrom": "custom_url_requests",
+          "tableTo": "real_estate_listings",
+          "columnsFrom": [
+            "listing_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.real_estate_images": {
+      "name": "real_estate_images",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "listing_id": {
+          "name": "listing_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "storage_path": {
+          "name": "storage_path",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "public_url": {
+          "name": "public_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "position": {
+          "name": "position",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NOW()"
+        }
+      },
+      "indexes": {
+        "idx_real_estate_images_listing_id": {
+          "name": "idx_real_estate_images_listing_id",
+          "columns": [
+            {
+              "expression": "listing_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "real_estate_images_listing_id_real_estate_listings_id_fk": {
+          "name": "real_estate_images_listing_id_real_estate_listings_id_fk",
+          "tableFrom": "real_estate_images",
+          "tableTo": "real_estate_listings",
+          "columnsFrom": [
+            "listing_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.real_estate_ki_analyses": {
+      "name": "real_estate_ki_analyses",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "listing_id": {
+          "name": "listing_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "preis_bewertung": {
+          "name": "preis_bewertung",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "preis_abweichung_pct": {
+          "name": "preis_abweichung_pct",
+          "type": "numeric(6, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "staerken": {
+          "name": "staerken",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'[]'::jsonb"
+        },
+        "schwaechen": {
+          "name": "schwaechen",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'[]'::jsonb"
+        },
+        "lage_bewertung": {
+          "name": "lage_bewertung",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "rendite_geschaetzt_pct": {
+          "name": "rendite_geschaetzt_pct",
+          "type": "numeric(6, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "zusammenfassung": {
+          "name": "zusammenfassung",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "investment_score": {
+          "name": "investment_score",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "investment_score_begruendung": {
+          "name": "investment_score_begruendung",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "risiken_investor": {
+          "name": "risiken_investor",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'[]'::jsonb"
+        },
+        "cashflow_einschaetzung": {
+          "name": "cashflow_einschaetzung",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fix_flip_massnahmen": {
+          "name": "fix_flip_massnahmen",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'[]'::jsonb"
+        },
+        "fix_flip_werteinschaetzung": {
+          "name": "fix_flip_werteinschaetzung",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fix_flip_gesamtkosten_min_eur": {
+          "name": "fix_flip_gesamtkosten_min_eur",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fix_flip_gesamtkosten_max_eur": {
+          "name": "fix_flip_gesamtkosten_max_eur",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "arv_min_eur": {
+          "name": "arv_min_eur",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "arv_max_eur": {
+          "name": "arv_max_eur",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "arv_begruendung": {
+          "name": "arv_begruendung",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "arv_konfidenz": {
+          "name": "arv_konfidenz",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "holding_monate": {
+          "name": "holding_monate",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": false,
+          "default": 9
+        },
+        "flip_gesamtinvestition_min_eur": {
+          "name": "flip_gesamtinvestition_min_eur",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "flip_gesamtinvestition_max_eur": {
+          "name": "flip_gesamtinvestition_max_eur",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "flip_gewinn_min_eur": {
+          "name": "flip_gewinn_min_eur",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "flip_gewinn_max_eur": {
+          "name": "flip_gewinn_max_eur",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "flip_roi_pct_min": {
+          "name": "flip_roi_pct_min",
+          "type": "numeric(6, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "flip_roi_pct_max": {
+          "name": "flip_roi_pct_max",
+          "type": "numeric(6, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "flip_opportunity_score": {
+          "name": "flip_opportunity_score",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "flip_opportunity_begruendung": {
+          "name": "flip_opportunity_begruendung",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "flip_szenario": {
+          "name": "flip_szenario",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "model_used": {
+          "name": "model_used",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tokens_used": {
+          "name": "tokens_used",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": 0
+        },
+        "analyzed_at": {
+          "name": "analyzed_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NOW()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "real_estate_ki_analyses_listing_id_real_estate_listings_id_fk": {
+          "name": "real_estate_ki_analyses_listing_id_real_estate_listings_id_fk",
+          "tableFrom": "real_estate_ki_analyses",
+          "tableTo": "real_estate_listings",
+          "columnsFrom": [
+            "listing_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.real_estate_listings": {
+      "name": "real_estate_listings",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "external_id": {
+          "name": "external_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source": {
+          "name": "source",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source_url": {
+          "name": "source_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "typ": {
+          "name": "typ",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "angebotstyp": {
+          "name": "angebotstyp",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "titel": {
+          "name": "titel",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "adresse": {
+          "name": "adresse",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "plz": {
+          "name": "plz",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ort": {
+          "name": "ort",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lat": {
+          "name": "lat",
+          "type": "numeric(10, 7)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lng": {
+          "name": "lng",
+          "type": "numeric(10, 7)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "preis": {
+          "name": "preis",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "preis_pro_m2": {
+          "name": "preis_pro_m2",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "wohnflaeche_m2": {
+          "name": "wohnflaeche_m2",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "zimmer": {
+          "name": "zimmer",
+          "type": "numeric(4, 1)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "baujahr": {
+          "name": "baujahr",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "effizienzklasse": {
+          "name": "effizienzklasse",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cover_image_url": {
+          "name": "cover_image_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ist_aktiv": {
+          "name": "ist_aktiv",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": true
+        },
+        "raw_data": {
+          "name": "raw_data",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "scraped_at": {
+          "name": "scraped_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NOW()"
+        },
+        "first_seen_at": {
+          "name": "first_seen_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NOW()"
+        },
+        "last_seen_at": {
+          "name": "last_seen_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NOW()"
+        },
+        "submitted_by_user_id": {
+          "name": "submitted_by_user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "real_estate_listings_submitted_by_user_id_users_id_fk": {
+          "name": "real_estate_listings_submitted_by_user_id_users_id_fk",
+          "tableFrom": "real_estate_listings",
+          "tableTo": "users",
+          "columnsFrom": [
+            "submitted_by_user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "real_estate_listings_external_id_source_unique": {
+          "name": "real_estate_listings_external_id_source_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "external_id",
+            "source"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.sessions": {
+      "name": "sessions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "session_token": {
+          "name": "session_token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "expires": {
+          "name": "expires",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "sessions_user_id_users_id_fk": {
+          "name": "sessions_user_id_users_id_fk",
+          "tableFrom": "sessions",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "sessions_session_token_unique": {
+          "name": "sessions_session_token_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "session_token"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.user_alerts": {
+      "name": "user_alerts",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "alert_type": {
+          "name": "alert_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "criteria": {
+          "name": "criteria",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "frequency": {
+          "name": "frequency",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'daily'"
+        },
+        "is_active": {
+          "name": "is_active",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": true
+        },
+        "last_triggered_at": {
+          "name": "last_triggered_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NOW()"
+        }
+      },
+      "indexes": {
+        "idx_user_alerts_user_id": {
+          "name": "idx_user_alerts_user_id",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "user_alerts_user_id_users_id_fk": {
+          "name": "user_alerts_user_id_users_id_fk",
+          "tableFrom": "user_alerts",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.user_favorites": {
+      "name": "user_favorites",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "listing_type": {
+          "name": "listing_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "listing_id": {
+          "name": "listing_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "notes": {
+          "name": "notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NOW()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "user_favorites_user_id_users_id_fk": {
+          "name": "user_favorites_user_id_users_id_fk",
+          "tableFrom": "user_favorites",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "user_favorites_user_id_listing_type_listing_id_unique": {
+          "name": "user_favorites_user_id_listing_type_listing_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "user_id",
+            "listing_type",
+            "listing_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.users": {
+      "name": "users",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email_verified": {
+          "name": "email_verified",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "password_hash": {
+          "name": "password_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "role": {
+          "name": "role",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'user'"
+        },
+        "color_theme": {
+          "name": "color_theme",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'violett'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NOW()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NOW()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "users_email_unique": {
+          "name": "users_email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.verification_tokens": {
+      "name": "verification_tokens",
+      "schema": "",
+      "columns": {
+        "identifier": {
+          "name": "identifier",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "token": {
+          "name": "token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "expires": {
+          "name": "expires",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "verification_tokens_token_unique": {
+          "name": "verification_tokens_token_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "token"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.scrape_jobs": {
+      "name": "scrape_jobs",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "flow_name": {
+          "name": "flow_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "job_type": {
+          "name": "job_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "bundesland": {
+          "name": "bundesland",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'pending'"
+        },
+        "items_found": {
+          "name": "items_found",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": 0
+        },
+        "items_new": {
+          "name": "items_new",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": 0
+        },
+        "items_updated": {
+          "name": "items_updated",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": 0
+        },
+        "items_failed": {
+          "name": "items_failed",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": 0
+        },
+        "error_message": {
+          "name": "error_message",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "prefect_run_id": {
+          "name": "prefect_run_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "started_at": {
+          "name": "started_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "completed_at": {
+          "name": "completed_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NOW()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.user_login_sessions": {
+      "name": "user_login_sessions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_agent": {
+          "name": "user_agent",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ip_address": {
+          "name": "ip_address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "NOW()"
+        },
+        "last_seen_at": {
+          "name": "last_seen_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "NOW()"
+        },
+        "revoked_at": {
+          "name": "revoked_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "user_login_sessions_user_id_idx": {
+          "name": "user_login_sessions_user_id_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "user_login_sessions_user_id_users_id_fk": {
+          "name": "user_login_sessions_user_id_users_id_fk",
+          "tableFrom": "user_login_sessions",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.alert_notifications": {
+      "name": "alert_notifications",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "alert_id": {
+          "name": "alert_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "listing_id": {
+          "name": "listing_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sent_at": {
+          "name": "sent_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NOW()"
+        }
+      },
+      "indexes": {
+        "idx_alert_notifications_alert_id": {
+          "name": "idx_alert_notifications_alert_id",
+          "columns": [
+            {
+              "expression": "alert_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "alert_notifications_alert_id_user_alerts_id_fk": {
+          "name": "alert_notifications_alert_id_user_alerts_id_fk",
+          "tableFrom": "alert_notifications",
+          "tableTo": "user_alerts",
+          "columnsFrom": [
+            "alert_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "alert_notifications_listing_id_zvg_listings_id_fk": {
+          "name": "alert_notifications_listing_id_zvg_listings_id_fk",
+          "tableFrom": "alert_notifications",
+          "tableTo": "zvg_listings",
+          "columnsFrom": [
+            "listing_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "alert_notifications_alert_id_listing_id_unique": {
+          "name": "alert_notifications_alert_id_listing_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "alert_id",
+            "listing_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.investor_digests": {
+      "name": "investor_digests",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "period": {
+          "name": "period",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "period_key": {
+          "name": "period_key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "content": {
+          "name": "content",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "model_used": {
+          "name": "model_used",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "generated_at": {
+          "name": "generated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "NOW()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "investor_digests_period_period_key_unique": {
+          "name": "investor_digests_period_period_key_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "period",
+            "period_key"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

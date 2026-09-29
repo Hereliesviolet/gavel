@@ -1,0 +1,10 @@
+pnpm-lock.yaml
+pnpm-workspace.yaml
+node_modules
+.next
+apps/web/drizzle/migrations
+apps/web/next-env.d.ts
+apps/web/public
+scrapers
+docs
+infra

@@ -1,0 +1,16 @@
+route:
+  receiver: gavel
+  group_by: ["alertname"]
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+
+receivers:
+  - name: gavel
+    webhook_configs:
+      - url: http://web:3000/api/cron/ops-alert
+        send_resolved: true
+        http_config:
+          authorization:
+            type: Bearer
+            credentials_file: /tmp/webhook_token
