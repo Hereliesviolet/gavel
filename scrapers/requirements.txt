@@ -64,7 +64,7 @@ idna==3.20
 instructor==1.17.0
 Jinja2==3.1.6
 jinja2-humanize-extension==0.4.0
-jiter==0.17.0
+jiter==0.14.0
 jsonpatch==1.33
 jsonpointer==3.1.1
 jsonschema==4.26.0
@@ -99,7 +99,7 @@ pycryptodome==3.23.0
 pydantic==2.13.5
 pydantic-extra-types==2.11.1
 pydantic-settings==2.15.0
-pydantic_core==2.49.0
+pydantic_core==2.46.5
 pydocket==0.25.2
 Pygments==2.21.0
 pypdfium2==5.13.0
