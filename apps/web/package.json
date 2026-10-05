@@ -50,7 +50,7 @@
     "minio": "^8.0.7",
     "next": "16.3.6",
     "next-auth": "5.0.0-beta.32",
-    "nodemailer": "^10.0.10",
+    "nodemailer": "^10.0.13",
     "postgres": "^3.4.5",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
@@ -67,16 +67,16 @@
     "@tailwindcss/postcss": "^4.3.3",
     "@types/bcryptjs": "^3.0.0",
     "@types/node": "^26",
-    "@types/nodemailer": "^7.0.0",
+    "@types/nodemailer": "^8.0.2",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "drizzle-kit": "^0.31.11",
-    "eslint": "^9",
+    "eslint": "^10",
     "eslint-config-next": "16.3.6",
     "postcss": "^8.5.28",
     "shadcn": "4.21.0",
     "tailwindcss": "^4.3.3",
-    "typescript": "^5",
+    "typescript": "^7",
     "vitest": "^5.0.2"
   }
 }
